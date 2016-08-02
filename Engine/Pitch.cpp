@@ -64,16 +64,48 @@ FPitch KnownPitches[] =
     { 'B', false, 5, 987.77 },
 };
 
+const qreal LowFrequencyDetectionThreshold = 5.0;
+const qreal HighFrequencyDetectionThreshold = 50.0;
+
 FPitch* FindClosestPitch(qreal Frequency)
 {
     size_t Size = SizeOfArray(KnownPitches);
-    if ((Frequency >= KnownPitches[0].Frequency) &&
-        (Frequency <= KnownPitches[Size - 1].Frequency))
-    {
-        // Perform a binary search on the array.
+    qreal MinDetectableFrequency = KnownPitches[0].Frequency;
+    qreal MaxDetectableFrequency = KnownPitches[Size - 1].Frequency;
 
+    if ((Frequency < MinDetectableFrequency - LowFrequencyDetectionThreshold) ||
+        (Frequency > MaxDetectableFrequency - HighFrequencyDetectionThreshold))
+    {
+        // Frequency is too low or too high.
+        return nullptr;
     }
-    return nullptr;
+
+    // Perform a binary search on the array.
+    FPitch SearchValue;
+    SearchValue.Frequency = Frequency;
+    auto Begin = std::begin(KnownPitches);
+    auto End = std::end(KnownPitches);
+    auto Iter = std::lower_bound(Begin, End, SearchValue);
+
+    if (Iter == End)
+    {
+        // Should not happen.
+        return nullptr;
+    }
+
+    if (Iter != Begin)
+    {
+        auto PrevPitch = Iter - 1;
+        qreal Delta1 = Frequency - PrevPitch->Frequency;
+        qreal Delta2 = Iter->Frequency - Frequency;
+        if (Delta1 < Delta2)
+        {
+            // Closest pitch is actually the previous one.
+            return PrevPitch;
+        }
+    }
+
+    return Iter;
 }
 
 }
@@ -82,7 +114,7 @@ FPitch::FPitch()
 {
 }
 
-FPitch::FPitch(char Class, bool bSharp, quint8 Octave, qreal Frequency)
+FPitch::FPitch(char Class, bool bSharp, int Octave, qreal Frequency)
     : Class(Class)
     , bSharp(bSharp)
     , Octave(Octave)
@@ -93,6 +125,11 @@ FPitch::FPitch(char Class, bool bSharp, quint8 Octave, qreal Frequency)
 const FPitch* FPitch::FromFrequency(qreal Frequency)
 {
     return FindClosestPitch(Frequency);
+}
+
+bool FPitch::operator <(const FPitch &other) const
+{
+    return this->Frequency < other.Frequency;
 }
 
 

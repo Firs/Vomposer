@@ -1,7 +1,8 @@
 #include <QString>
 #include <QtTest>
 #include <QCoreApplication>
-#include <Engine.h>
+#include "Engine.h"
+#include "Pitch.h"
 
 class TestPitchRecognition : public QObject
 {
@@ -15,6 +16,7 @@ private Q_SLOTS:
     void cleanupTestCase();
     void TestCase1_data();
     void TestCase1();
+    void TestPitchFromFrequency();
 };
 
 TestPitchRecognition::TestPitchRecognition()
@@ -42,9 +44,34 @@ void TestPitchRecognition::TestCase1()
 
     FEngine Engine;
     Engine.loadFile("Data/Test/C3.wav");
-    Engine.startPlayback();
+}
 
-    QThread::sleep(2);
+void TestPitchRecognition::TestPitchFromFrequency()
+{
+    {
+        auto Pitch = FPitch::FromFrequency(442);
+        QCOMPARE(Pitch != nullptr, true);
+        QCOMPARE(Pitch->Class, 'A');
+        QCOMPARE(Pitch->Octave, 4);
+        QCOMPARE(Pitch->bSharp, false);
+        QCOMPARE(Pitch->Frequency, 440.0);
+    }
+    {
+        auto Pitch = FPitch::FromFrequency(435);
+        QCOMPARE(Pitch != nullptr, true);
+        QCOMPARE(Pitch->Class, 'A');
+        QCOMPARE(Pitch->Octave, 4);
+        QCOMPARE(Pitch->bSharp, false);
+        QCOMPARE(Pitch->Frequency, 440.0);
+    }
+    {
+        auto Pitch = FPitch::FromFrequency(1100);
+        QCOMPARE(Pitch == nullptr, true);
+    }
+    {
+        auto Pitch = FPitch::FromFrequency(-500);
+        QCOMPARE(Pitch == nullptr, true);
+    }
 }
 
 QTEST_MAIN(TestPitchRecognition)
