@@ -74,7 +74,7 @@ FPitch* FindClosestPitch(qreal Frequency)
     qreal MaxDetectableFrequency = KnownPitches[Size - 1].Frequency;
 
     if ((Frequency < MinDetectableFrequency - LowFrequencyDetectionThreshold) ||
-        (Frequency > MaxDetectableFrequency - HighFrequencyDetectionThreshold))
+        (Frequency > MaxDetectableFrequency + HighFrequencyDetectionThreshold))
     {
         // Frequency is too low or too high.
         return nullptr;
