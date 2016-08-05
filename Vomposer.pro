@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    Engine \
     App \
-    Test \
-    Engine
+    Test

@@ -4,7 +4,7 @@ QT += qml quick multimedia
 CONFIG += c++11
 
 SOURCES += \
-    Main.cpp \
+    Main.cpp
 
 RESOURCES += qml.qrc
 

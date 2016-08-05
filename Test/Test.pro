@@ -15,7 +15,8 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += TestPitchRecognition.cpp
+SOURCES += \
+    TestPitch.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Engine/ -lEngine

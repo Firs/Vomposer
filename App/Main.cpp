@@ -1,17 +1,17 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "Engine.h"
+
+#include "PitchMonitor.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QGuiApplication App(argc, argv);
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    QQmlApplicationEngine QmlAppEngine;
+    QmlAppEngine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
 
-    FEngine Engine;
-    Engine.loadFile("Data/Test/C3.wav");
-    Engine.startPlayback();
+    FPitchMonitor Monitor;
+    Monitor.Start();
 
-    return app.exec();
+    return App.exec();
 }

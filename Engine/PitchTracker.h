@@ -1,7 +1,4 @@
-#ifndef FPITCHRECOGNIZER_H
-#define FPITCHRECOGNIZER_H
-
-#include <QString>
+#pragma once
 
 #include "Pitch.h"
 
@@ -20,4 +17,3 @@ private:
     qreal CurrentPitchFrequency;
 };
 
-#endif // FPITCHRECOGNIZER_H

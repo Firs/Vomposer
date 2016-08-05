@@ -85,27 +85,23 @@ FPitch* FindClosestPitch(qreal Frequency)
     SearchValue.Frequency = Frequency;
     auto Begin = std::begin(KnownPitches);
     auto End = std::end(KnownPitches);
-    auto Iter = std::lower_bound(Begin, End, SearchValue);
+    auto Found = std::lower_bound(Begin, End, SearchValue);
 
-    if (Iter == End)
-    {
-        // Should not happen.
-        return nullptr;
-    }
+    Q_ASSERT(Found != End);
 
-    if (Iter != Begin)
+    if (Found != Begin)
     {
-        auto PrevPitch = Iter - 1;
-        qreal Delta1 = Frequency - PrevPitch->Frequency;
-        qreal Delta2 = Iter->Frequency - Frequency;
-        if (Delta1 < Delta2)
+        auto PrevPitch = Found - 1;
+        qreal DistanceToLower = Frequency - PrevPitch->Frequency;
+        qreal DistanceToUpper = Found->Frequency - Frequency;
+        if (DistanceToLower < DistanceToUpper)
         {
             // Closest pitch is actually the previous one.
             return PrevPitch;
         }
     }
 
-    return Iter;
+    return Found;
 }
 
 }
