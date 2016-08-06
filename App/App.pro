@@ -4,9 +4,11 @@ QT += qml quick multimedia
 CONFIG += c++11
 
 SOURCES += \
-    Main.cpp
+    Main.cpp \
+    QmlPitchValueSource.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    Qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -18,6 +20,11 @@ win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Engine/ -lEngine
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Engine/ -lEngined
 else:unix: LIBS += -L$$OUT_PWD/../Engine/ -lEngine
 
+ANDROID_EXTRA_LIBS += $$OUT_PWD/../Engine/libEngine.so
+
 INCLUDEPATH += $$PWD/../Engine
 DEPENDPATH += $$PWD/../Engine
+
+HEADERS += \
+    QmlPitchValueSource.h
 

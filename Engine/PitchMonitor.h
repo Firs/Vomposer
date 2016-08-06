@@ -26,7 +26,7 @@ class ENGINESHARED_EXPORT FPitchMonitor : public QObject
     Q_OBJECT
 
 public:
-    explicit FPitchMonitor(QObject *parent = 0);
+    explicit FPitchMonitor(QObject* parent = nullptr);
     ~FPitchMonitor();
 
     const QList<QAudioDeviceInfo>& GetAvailableAudioInputDevices() const

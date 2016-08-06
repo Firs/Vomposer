@@ -14,24 +14,21 @@ TEMPLATE = lib
 DEFINES += ENGINE_LIBRARY
 
 SOURCES += \
-    3rdParty/wavfile.cpp \
     Note.cpp \
     Pitch.cpp \
     PitchTracker.cpp \
     3rdParty/dywapitchtrack.c \
     PitchMonitor.cpp \
-    3rdParty/AudioUtils.cpp
+    Utils.cpp
 
 HEADERS +=\
     3rdParty/dywapitchtrack.h \
-    3rdParty/wavfile.h \
-    Platform/Utils.h \
     Note.h \
     Pitch.h \
     PitchTracker.h \
     Global.h \
     PitchMonitor.h \
-    3rdParty/AudioUtils.h
+    Utils.h
 
 unix {
     target.path = /usr/lib

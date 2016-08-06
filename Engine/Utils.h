@@ -23,7 +23,6 @@ qint16 RealToPcm(qreal real);
 // Check whether the audio format is signed, little-endian, 16-bit PCM
 bool IsPCMS16LE(const QAudioFormat &format);
 
-
 // Compile-time calculation of powers of two
 template<int N> class PowerOfTwo
 { public: static const int Result = PowerOfTwo<N-1>::Result * 2; };
@@ -31,6 +30,11 @@ template<int N> class PowerOfTwo
 template<> class PowerOfTwo<0>
 { public: static const int Result = 1; };
 
+template <typename T, size_t N>
+inline size_t SizeOfArray(const T(&)[N])
+{
+    return N;
+}
 
 // Macro which connects a signal to a slot, and which causes application to
 // abort if the connection fails.  This is intended to catch programming errors

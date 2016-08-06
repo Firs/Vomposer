@@ -2,9 +2,7 @@ import QtQuick 2.7
 
 Rectangle {
     property alias mouseArea: mouseArea
-
-    width: 360
-    height: 360
+    property alias noteNameLabel: noteNameLabel
 
     MouseArea {
         id: mouseArea
@@ -12,7 +10,9 @@ Rectangle {
     }
 
     Text {
+        id: noteNameLabel
+        text: "C#4"
+        font.pointSize: 72
         anchors.centerIn: parent
-        text: "Hello World"
     }
 }

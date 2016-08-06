@@ -3,7 +3,7 @@
 
 #include <QString>
 
-struct FPitch
+class FPitch
 {
 public:
     FPitch();

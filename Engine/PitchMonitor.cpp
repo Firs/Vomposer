@@ -1,6 +1,5 @@
 #include "PitchMonitor.h"
 
-#include <3rdParty/AudioUtils.h>
 #include <QAudioInput>
 #include <QCoreApplication>
 #include <QDebug>
@@ -9,6 +8,7 @@
 #include <QMetaObject>
 
 #include "PitchTracker.h"
+#include "Utils.h"
 
 const int BufferDurationUs = 0.1 * 1000000;
 const int NotifyIntervalMs = 50;
@@ -210,26 +210,11 @@ bool FPitchMonitor::SelectAudioFormat()
     Format.setCodec("audio/pcm");
     Format.setSampleSize(16);
     Format.setSampleType(QAudioFormat::SignedInt);
+    Format.setSampleRate(44100);
+    Format.setChannelCount(1);
 
-    for (int SampleRate : SampleRatesList)
-    {
-        if (bFoundSupportedFormat)
-        {
-            break;
-        }
-        Format.setSampleRate(SampleRate);
-
-        for (int Channels : ChannelsList)
-        {
-            Format.setChannelCount(Channels);
-            bFoundSupportedFormat = AudioInputDevice.isFormatSupported(Format);
-            qDebug() << "FEngine::Initialize checking " << Format << bFoundSupportedFormat;
-            if (bFoundSupportedFormat)
-            {
-                break;
-            }
-        }
-    }
+    bFoundSupportedFormat = AudioInputDevice.isFormatSupported(Format);
+    qDebug() << "FEngine::Initialize checking " << Format << bFoundSupportedFormat;
 
     if (!bFoundSupportedFormat)
     {

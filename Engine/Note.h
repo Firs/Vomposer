@@ -3,7 +3,7 @@
 
 #include "Pitch.h"
 
-struct FNote
+class FNote
 {
 public:
     FPitch Pitch;

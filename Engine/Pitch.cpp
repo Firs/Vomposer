@@ -1,6 +1,7 @@
 #include "Pitch.h"
+
 #include <algorithm>
-#include "Platform/Utils.h"
+#include "Utils.h"
 
 namespace
 {
@@ -87,7 +88,10 @@ FPitch* FindClosestPitch(qreal Frequency)
     auto End = std::end(KnownPitches);
     auto Found = std::lower_bound(Begin, End, SearchValue);
 
-    Q_ASSERT(Found != End);
+    if (Found == End)
+    {
+        return nullptr;
+    }
 
     if (Found != Begin)
     {
