@@ -39,14 +39,6 @@ private Q_SLOTS:
         Pitch = FPitch::FromFrequency(-500);
         QCOMPARE(Pitch == nullptr, true);
     }
-
-    void TestPitchMonitorStartup()
-    {
-
-            FPitchMonitor Monitor;
-            Monitor.Start();
-
-    }
 };
 
 QTEST_MAIN(TestPitch)

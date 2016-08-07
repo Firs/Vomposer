@@ -20,9 +20,19 @@ FPitchMonitorModel::~FPitchMonitorModel()
 {
 }
 
-QString FPitchMonitorModel::GetPitchName() const
+QChar FPitchMonitorModel::GetPitchClass() const
 {
-    return CurrPitch ? CurrPitch->ToString() : "";
+    return CurrPitch ? CurrPitch->Class : 0;
+}
+
+bool FPitchMonitorModel::GetPitchSharp() const
+{
+    return CurrPitch ? CurrPitch->bSharp : false;
+}
+
+int FPitchMonitorModel::GetPitchOctave() const
+{
+    return CurrPitch ? CurrPitch->Octave : 0;
 }
 
 qreal FPitchMonitorModel::GetPitchFrequency() const
@@ -32,7 +42,7 @@ qreal FPitchMonitorModel::GetPitchFrequency() const
 
 qreal FPitchMonitorModel::GetPrevPitchFrequency() const
 {
-    const FPitch* PrevPitch = CurrPitch ? CurrPitch->GetPrevPitch() : nullptr;
+    const FPitch* PrevPitch = CurrPitch ? CurrPitch->GetPrevPitch(): nullptr;
     return PrevPitch ? PrevPitch->Frequency : 0.0;
 }
 
@@ -62,7 +72,7 @@ void FPitchMonitorModel::OnPitchUpdated(const FPitch* Pitch, qreal OriginalFrequ
     CurrPitch = Pitch;
     Frequency = OriginalFrequency;
 
-    emit PitchChanged();
+    emit pitchChanged();
 }
 
 

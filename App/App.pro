@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick multimedia
+QT += qml quick multimedia svg xml
 CONFIG += c++11
 
 SOURCES += \

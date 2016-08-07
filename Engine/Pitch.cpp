@@ -135,12 +135,12 @@ bool FPitch::operator <(const FPitch &other) const
 
 const FPitch* FPitch::GetPrevPitch() const
 {
-    return (Id > 1) ? &KnownPitches[Id - 1] : nullptr;
+    return (Id > 1) ? &KnownPitches[(Id - 1) - 1] : nullptr;
 }
 
 const FPitch* FPitch::GetNextPitch() const
 {
-    return (Id < MaxId) ? &KnownPitches[Id + 1] : nullptr;
+    return (Id < MaxId) ? &KnownPitches[(Id + 1) - 1] : nullptr;
 }
 
 

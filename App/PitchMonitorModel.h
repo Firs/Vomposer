@@ -11,12 +11,14 @@ class FPitchMonitorModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString PitchName READ GetPitchName NOTIFY PitchChanged)
-    Q_PROPERTY(qreal PitchFrequency READ GetPitchFrequency NOTIFY PitchChanged)
-    Q_PROPERTY(qreal PrevPitchFrequency READ GetPrevPitchFrequency NOTIFY PitchChanged)
-    Q_PROPERTY(qreal NextPitchFrequency READ GetNextPitchFrequency NOTIFY PitchChanged)
+    Q_PROPERTY(QChar PitchClass READ GetPitchClass NOTIFY pitchChanged)
+    Q_PROPERTY(bool PitchSharp READ GetPitchSharp NOTIFY pitchChanged)
+    Q_PROPERTY(int PitchOctave READ GetPitchOctave NOTIFY pitchChanged)
+    Q_PROPERTY(qreal PitchFrequency READ GetPitchFrequency NOTIFY pitchChanged)
+    Q_PROPERTY(qreal PrevPitchFrequency READ GetPrevPitchFrequency NOTIFY pitchChanged)
+    Q_PROPERTY(qreal NextPitchFrequency READ GetNextPitchFrequency NOTIFY pitchChanged)
 
-    Q_PROPERTY(qreal Frequency READ GetFrequency NOTIFY PitchChanged)
+    Q_PROPERTY(qreal Frequency READ GetFrequency NOTIFY pitchChanged)
 
 public:
     FPitchMonitorModel(
@@ -24,7 +26,10 @@ public:
             QObject *parent = nullptr);
     virtual ~FPitchMonitorModel();
 
-    QString GetPitchName() const;
+    QChar GetPitchClass() const;
+    bool GetPitchSharp() const;
+    int GetPitchOctave() const;
+
     qreal GetPitchFrequency() const;
     qreal GetPrevPitchFrequency() const;
     qreal GetNextPitchFrequency() const;
@@ -32,7 +37,7 @@ public:
     qreal GetFrequency() const;
 
 signals:
-    void PitchChanged();
+    void pitchChanged();
 
 private slots:
     void OnPitchUpdated(const FPitch* Pitch, qreal OriginalFrequency);
