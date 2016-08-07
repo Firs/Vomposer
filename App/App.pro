@@ -5,7 +5,7 @@ CONFIG += c++11
 
 SOURCES += \
     Main.cpp \
-    QmlPitchValueSource.cpp
+    PitchMonitorModel.cpp
 
 RESOURCES += \
     Qml.qrc
@@ -26,5 +26,5 @@ INCLUDEPATH += $$PWD/../Engine
 DEPENDPATH += $$PWD/../Engine
 
 HEADERS += \
-    QmlPitchValueSource.h
+    PitchMonitorModel.h
 

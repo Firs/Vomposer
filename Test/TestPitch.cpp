@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 
 #include "Pitch.h"
+#include "PitchMonitor.h"
 
 class TestPitch : public QObject
 {
@@ -37,6 +38,14 @@ private Q_SLOTS:
 
         Pitch = FPitch::FromFrequency(-500);
         QCOMPARE(Pitch == nullptr, true);
+    }
+
+    void TestPitchMonitorStartup()
+    {
+
+            FPitchMonitor Monitor;
+            Monitor.Start();
+
     }
 };
 

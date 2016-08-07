@@ -7,9 +7,10 @@ class FPitch
 {
 public:
     FPitch();
-    FPitch(char Class, bool bSharp, int Octave, qreal Frequency);
+    FPitch(int Id, char Class, bool bSharp, int Octave, qreal Frequency);
     static const FPitch* FromFrequency(qreal Frequency);
 
+    int Id;
     char Class;
     bool bSharp;
     int Octave;
@@ -21,6 +22,9 @@ public:
     }
 
     bool operator <(const FPitch& other) const;
+
+    const FPitch* GetNextPitch() const;
+    const FPitch* GetPrevPitch() const;
 };
 
 #endif // FPITCH_H

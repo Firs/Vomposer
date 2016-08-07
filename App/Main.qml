@@ -1,16 +1,26 @@
 import QtQuick 2.7
 import QtQuick.Window 2.2
-import Vomposer 1.0
 
 Window {
     visible: true
-    width: 640
-    height: 480
+    width: 480
+    height: 640
     title: qsTr("Vomposer")
 
-    MainForm {
+    Rectangle {
         anchors.fill: parent
+        color: "#212126"
 
-        PitchValueSource on noteNameLabel.text {}
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+        }
+
+        Text {
+            font.pointSize: 72
+            anchors.centerIn: parent
+            text: PitchMonitor.PitchName
+            color: "white"
+        }
     }
 }

@@ -1,68 +1,69 @@
 #include "Pitch.h"
 
 #include <algorithm>
-#include "Utils.h"
 
 namespace
 {
 
+static int MaxId = 0;
+
 // Known pitches within the vocal range, sorted by frequency.
 FPitch KnownPitches[] =
 {
-    { 'C', false, 2, 65.41  },
-    { 'C', true , 2, 69.30  },
-    { 'D', false, 2, 73.42  },
-    { 'D', true , 2, 77.78  },
-    { 'E', false, 2, 82.41  },
-    { 'F', false, 2, 87.31  },
-    { 'F', true , 2, 92.15  },
-    { 'G', false, 2, 98.00  },
-    { 'G', true , 2, 103.83 },
-    { 'A', false, 2, 110.00 },
-    { 'A', true , 2, 116.54 },
-    { 'B', false, 2, 123.47 },
+    { ++MaxId, 'C', false, 2, 65.41  },
+    { ++MaxId, 'C', true , 2, 69.30  },
+    { ++MaxId, 'D', false, 2, 73.42  },
+    { ++MaxId, 'D', true , 2, 77.78  },
+    { ++MaxId, 'E', false, 2, 82.41  },
+    { ++MaxId, 'F', false, 2, 87.31  },
+    { ++MaxId, 'F', true , 2, 92.15  },
+    { ++MaxId, 'G', false, 2, 98.00  },
+    { ++MaxId, 'G', true , 2, 103.83 },
+    { ++MaxId, 'A', false, 2, 110.00 },
+    { ++MaxId, 'A', true , 2, 116.54 },
+    { ++MaxId, 'B', false, 2, 123.47 },
 
 
-    { 'C', false, 3, 130.81 },
-    { 'C', true , 3, 138.59 },
-    { 'D', false, 3, 146.83 },
-    { 'D', true , 3, 155.56 },
-    { 'E', false, 3, 164.81 },
-    { 'F', false, 3, 174.61 },
-    { 'F', true , 3, 185.00 },
-    { 'G', false, 3, 196.00 },
-    { 'G', true , 3, 207.65 },
-    { 'A', false, 3, 220.00 },
-    { 'A', true , 3, 233.08 },
-    { 'B', false, 3, 246.94 },
+    { ++MaxId, 'C', false, 3, 130.81 },
+    { ++MaxId, 'C', true , 3, 138.59 },
+    { ++MaxId, 'D', false, 3, 146.83 },
+    { ++MaxId, 'D', true , 3, 155.56 },
+    { ++MaxId, 'E', false, 3, 164.81 },
+    { ++MaxId, 'F', false, 3, 174.61 },
+    { ++MaxId, 'F', true , 3, 185.00 },
+    { ++MaxId, 'G', false, 3, 196.00 },
+    { ++MaxId, 'G', true , 3, 207.65 },
+    { ++MaxId, 'A', false, 3, 220.00 },
+    { ++MaxId, 'A', true , 3, 233.08 },
+    { ++MaxId, 'B', false, 3, 246.94 },
 
 
-    { 'C', false, 4, 261.63 },
-    { 'C', true , 4, 277.18 },
-    { 'D', false, 4, 293.66 },
-    { 'D', true , 4, 311.13 },
-    { 'E', false, 4, 329.63 },
-    { 'F', false, 4, 349.23 },
-    { 'F', true , 4, 369.99 },
-    { 'G', false, 4, 392.00 },
-    { 'G', true , 4, 415.30 },
-    { 'A', false, 4, 440.00 },
-    { 'A', true , 4, 466.16 },
-    { 'B', false, 4, 493.88 },
+    { ++MaxId, 'C', false, 4, 261.63 },
+    { ++MaxId, 'C', true , 4, 277.18 },
+    { ++MaxId, 'D', false, 4, 293.66 },
+    { ++MaxId, 'D', true , 4, 311.13 },
+    { ++MaxId, 'E', false, 4, 329.63 },
+    { ++MaxId, 'F', false, 4, 349.23 },
+    { ++MaxId, 'F', true , 4, 369.99 },
+    { ++MaxId, 'G', false, 4, 392.00 },
+    { ++MaxId, 'G', true , 4, 415.30 },
+    { ++MaxId, 'A', false, 4, 440.00 },
+    { ++MaxId, 'A', true , 4, 466.16 },
+    { ++MaxId, 'B', false, 4, 493.88 },
 
 
-    { 'C', false, 5, 523.25 },
-    { 'C', true , 5, 554.37 },
-    { 'D', false, 5, 587.33 },
-    { 'D', true , 5, 622.25 },
-    { 'E', false, 5, 659.25 },
-    { 'F', false, 5, 698.46 },
-    { 'F', true , 5, 739.99 },
-    { 'G', false, 5, 783.99 },
-    { 'G', true , 5, 830.61 },
-    { 'A', false, 5, 880.00 },
-    { 'A', true , 5, 932.33 },
-    { 'B', false, 5, 987.77 },
+    { ++MaxId, 'C', false, 5, 523.25 },
+    { ++MaxId, 'C', true , 5, 554.37 },
+    { ++MaxId, 'D', false, 5, 587.33 },
+    { ++MaxId, 'D', true , 5, 622.25 },
+    { ++MaxId, 'E', false, 5, 659.25 },
+    { ++MaxId, 'F', false, 5, 698.46 },
+    { ++MaxId, 'F', true , 5, 739.99 },
+    { ++MaxId, 'G', false, 5, 783.99 },
+    { ++MaxId, 'G', true , 5, 830.61 },
+    { ++MaxId, 'A', false, 5, 880.00 },
+    { ++MaxId, 'A', true , 5, 932.33 },
+    { ++MaxId, 'B', false, 5, 987.77 },
 };
 
 const qreal LowFrequencyDetectionThreshold = 5.0;
@@ -70,9 +71,8 @@ const qreal HighFrequencyDetectionThreshold = 50.0;
 
 FPitch* FindClosestPitch(qreal Frequency)
 {
-    size_t Size = SizeOfArray(KnownPitches);
     qreal MinDetectableFrequency = KnownPitches[0].Frequency;
-    qreal MaxDetectableFrequency = KnownPitches[Size - 1].Frequency;
+    qreal MaxDetectableFrequency = KnownPitches[MaxId - 1].Frequency;
 
     if ((Frequency < MinDetectableFrequency - LowFrequencyDetectionThreshold) ||
         (Frequency > MaxDetectableFrequency + HighFrequencyDetectionThreshold))
@@ -108,14 +108,15 @@ FPitch* FindClosestPitch(qreal Frequency)
     return Found;
 }
 
-}
+} // namespace
 
 FPitch::FPitch()
 {
 }
 
-FPitch::FPitch(char Class, bool bSharp, int Octave, qreal Frequency)
-    : Class(Class)
+FPitch::FPitch(int Id, char Class, bool bSharp, int Octave, qreal Frequency)
+    : Id(Id)
+    , Class(Class)
     , bSharp(bSharp)
     , Octave(Octave)
     , Frequency(Frequency)
@@ -130,6 +131,16 @@ const FPitch* FPitch::FromFrequency(qreal Frequency)
 bool FPitch::operator <(const FPitch &other) const
 {
     return this->Frequency < other.Frequency;
+}
+
+const FPitch* FPitch::GetPrevPitch() const
+{
+    return (Id > 1) ? &KnownPitches[Id - 1] : nullptr;
+}
+
+const FPitch* FPitch::GetNextPitch() const
+{
+    return (Id < MaxId) ? &KnownPitches[Id + 1] : nullptr;
 }
 
 

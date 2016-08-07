@@ -10,7 +10,7 @@
 #include "PitchTracker.h"
 #include "Utils.h"
 
-const int BufferDurationUs = 0.1 * 1000000;
+const int BufferDurationUs = 1 * 1000000;
 const int NotifyIntervalMs = 50;
 
 FPitchMonitor::FPitchMonitor(QObject *Parent)
@@ -28,6 +28,11 @@ FPitchMonitor::FPitchMonitor(QObject *Parent)
 
 FPitchMonitor::~FPitchMonitor()
 {
+    if (QAudio::ActiveState == CurrentAudioState ||
+        QAudio::IdleState == CurrentAudioState)
+    {
+        Stop();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -51,6 +56,7 @@ void FPitchMonitor::Start()
                             this, SLOT(OnAudioStateChanged(QAudio::State)));
 
             AudioInputIODevice = AudioInput->start();
+
             CHECKED_CONNECT(AudioInputIODevice, SIGNAL(readyRead()),
                             this, SLOT(OnAudioDataReady()));
         }
@@ -98,6 +104,7 @@ void FPitchMonitor::OnAudioStateChanged(QAudio::State State)
 void FPitchMonitor::OnAudioDataReady()
 {
     const qint64 BytesToRead = AudioInput->bytesReady();
+    Q_ASSERT(BytesToRead <= AudioBuffer.size());
     const qint64 BytesRead = AudioInputIODevice->read(
                 AudioBuffer.data(), BytesToRead);
     if (BytesRead > 0)
@@ -116,14 +123,7 @@ void FPitchMonitor::OnAudioDataReady()
 
         auto Frequency = PitchTracker.GetCurrentFrequency();
         auto Pitch = FPitch::FromFrequency(Frequency);
-        QString PitchStr;
-        if (Pitch)
-        {
-            PitchStr = Pitch->ToString();
-        }
-        qDebug() << PitchTracker.GetCurrentFrequency() << PitchStr;
-
-        emit PitchDetected(Pitch);
+        emit PitchDetected(Pitch, Frequency);
     }
 }
 
@@ -239,12 +239,7 @@ void FPitchMonitor::Stop()
 
 void FPitchMonitor::SetAudioState(QAudio::State State)
 {
-    const bool Changed = (State != CurrentAudioState);
     CurrentAudioState = State;
-    if (Changed)
-    {
-        emit OnAudioStateChanged(CurrentAudioState);
-    }
 }
 
 void FPitchMonitor::SetAudioFormat(const QAudioFormat& Format)

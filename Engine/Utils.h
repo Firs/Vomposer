@@ -31,7 +31,7 @@ template<> class PowerOfTwo<0>
 { public: static const int Result = 1; };
 
 template <typename T, size_t N>
-inline size_t SizeOfArray(const T(&)[N])
+inline size_t ArraySize(const T(&)[N])
 {
     return N;
 }

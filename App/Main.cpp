@@ -1,21 +1,23 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickView>
+#include <QQmlContext>
 
 #include "PitchMonitor.h"
-#include "QmlPitchValueSource.h"
+#include "PitchMonitorModel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication App(argc, argv);
 
+    FPitchMonitor Monitor;
+    FPitchMonitorModel Model(Monitor);
+
     QQmlApplicationEngine AppEngine;
-
-    qmlRegisterType<QmlPitchValueSource>(
-                "Vomposer", 1, 0, "PitchValueSource");
-
+    AppEngine.rootContext()->setContextProperty(
+                "PitchMonitor", static_cast<QObject*>(&Model));
     AppEngine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
 
 
-    return App.exec();
+return App.exec();
 }

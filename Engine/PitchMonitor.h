@@ -57,7 +57,7 @@ public slots:
     void SetAudioInputDevice(const QAudioDeviceInfo &device);
 
 signals:
-    void PitchDetected(const FPitch* Pitch);
+    void PitchDetected(const FPitch* Pitch, qreal OriginalFrequency);
     void AudioFormatChanged(const QAudioFormat& Format);
 
 private slots:
