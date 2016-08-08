@@ -8,6 +8,8 @@ QT       += multimedia
 
 QT       -= gui
 
+CONFIG += c++11
+
 TARGET = Engine
 TEMPLATE = lib
 

@@ -1,9 +1,11 @@
 #ifndef FPITCH_H
 #define FPITCH_H
 
+#include <Global.h>
+
 #include <QString>
 
-class FPitch
+class ENGINESHARED_EXPORT FPitch
 {
 public:
     FPitch();

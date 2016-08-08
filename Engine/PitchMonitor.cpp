@@ -191,7 +191,7 @@ bool FPitchMonitor::SelectAudioFormat()
     // The Windows audio backend does not correctly report format support
     // (see QTBUG-9100).  Furthermore, although the audio subsystem captures
     // at 11025Hz, the resulting audio is corrupted.
-    sampleRatesList += 8000;
+    SampleRatesList += 8000;
 #endif
 
     SampleRatesList += AudioInputDevice.supportedSampleRates();
