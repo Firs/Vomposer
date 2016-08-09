@@ -39,7 +39,6 @@ class API_EXPORT FPitchMonitor : public QObject
 
 public:
     explicit FPitchMonitor(QObject* parent = nullptr);
-    ~FPitchMonitor();
 
     const QList<QAudioDeviceInfo>& GetAvailableAudioInputDevices() const
     {
@@ -57,20 +56,19 @@ public:
     }
 
     /**
-     * Stop any ongoing monitoring and reset to ground state.
+     * Stop any ongoing monitoring and reset to the ground state.
      */
     void Reset();
+
+signals:
+    void PitchDetected(const FPitch* Pitch, qreal OriginalFrequency);
+    void AudioFormatChanged(const QAudioFormat& Format);
 
 public slots:
     void Start();
     void Pause();
     void Stop();
-
-    void SetAudioInputDevice(const QAudioDeviceInfo &device);
-
-signals:
-    void PitchDetected(const FPitch* Pitch, qreal OriginalFrequency);
-    void AudioFormatChanged(const QAudioFormat& Format);
+    void SetAudioInputDevice(const QAudioDeviceInfo& Device);
 
 private slots:
     void OnAudioDataReady();
@@ -89,7 +87,7 @@ private:
     QAudioFormat        CurrentAudioFormat;
 
     const QList<QAudioDeviceInfo> AvailableAudioInputDevices;
-    QAudioDeviceInfo    AudioInputDevice;
+    QAudioDeviceInfo    AudioDeviceInfo;
     QAudioInput*        AudioInput;
     QIODevice*          AudioInputIODevice;
 

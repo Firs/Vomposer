@@ -33,21 +33,12 @@ FPitchMonitor::FPitchMonitor(QObject *Parent)
     , CurrentAudioState(QAudio::StoppedState)
     , AvailableAudioInputDevices(
           QAudioDeviceInfo::availableDevices(QAudio::AudioInput))
-    , AudioInputDevice(QAudioDeviceInfo::defaultInputDevice())
+    , AudioDeviceInfo(QAudioDeviceInfo::defaultInputDevice())
     , AudioInput(nullptr)
     , AudioInputIODevice(nullptr)
     , AudioBufferLength(0)
 {
     Initialize();
-}
-
-FPitchMonitor::~FPitchMonitor()
-{
-    if (QAudio::ActiveState == CurrentAudioState ||
-        QAudio::IdleState == CurrentAudioState)
-    {
-        Stop();
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -88,9 +79,9 @@ void FPitchMonitor::Pause()
 
 void FPitchMonitor::SetAudioInputDevice(const QAudioDeviceInfo& Device)
 {
-    if (AudioInputDevice.deviceName() != Device.deviceName())
+    if (AudioDeviceInfo.deviceName() != Device.deviceName())
     {
-        AudioInputDevice = Device;
+        AudioDeviceInfo = Device;
         Initialize();
     }
 }
@@ -184,7 +175,7 @@ bool FPitchMonitor::Initialize()
             AudioBuffer.fill(0);
             RecordedSamples.resize(AudioBufferLength / (2 * CurrentAudioFormat.channelCount()));
 
-            AudioInput = new QAudioInput(AudioInputDevice, CurrentAudioFormat, this);
+            AudioInput = new QAudioInput(AudioDeviceInfo, CurrentAudioFormat, this);
             AudioInput->setNotifyInterval(NotifyIntervalMs);
             Result = true;
         }
@@ -208,13 +199,13 @@ bool FPitchMonitor::SelectAudioFormat()
     SampleRatesList += 8000;
 #endif
 
-    SampleRatesList += AudioInputDevice.supportedSampleRates();
+    SampleRatesList += AudioDeviceInfo.supportedSampleRates();
     SampleRatesList = SampleRatesList.toSet().toList(); // remove duplicates
     qSort(SampleRatesList);
     qDebug() << "FEngine::Initialize SampleRatesList" << SampleRatesList;
 
     QList<int> ChannelsList;
-    ChannelsList += AudioInputDevice.supportedChannelCounts();
+    ChannelsList += AudioDeviceInfo.supportedChannelCounts();
     ChannelsList = ChannelsList.toSet().toList();
     qSort(ChannelsList);
     qDebug() << "FEngine::Initialize ChannelsList" << ChannelsList;
@@ -227,7 +218,7 @@ bool FPitchMonitor::SelectAudioFormat()
     Format.setSampleRate(44100);
     Format.setChannelCount(1);
 
-    bFoundSupportedFormat = AudioInputDevice.isFormatSupported(Format);
+    bFoundSupportedFormat = AudioDeviceInfo.isFormatSupported(Format);
     qDebug() << "FEngine::Initialize checking " << Format << bFoundSupportedFormat;
 
     if (!bFoundSupportedFormat)

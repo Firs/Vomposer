@@ -15,7 +15,28 @@
 **************************************************************************/
 #include "Playback.h"
 
-FPlayback::FPlayback(QObject *parent) : QObject(parent)
+FPlayback::FPlayback(QObject *parent)
+    : QObject(parent)
 {
 
+}
+
+void FPlayback::Start()
+{
+
+}
+
+void FPlayback::Pause()
+{
+
+}
+
+void FPlayback::Stop()
+{
+
+}
+
+void FPlayback::SetAudioOutputDevice(const QAudioDeviceInfo& Device)
+{
+    (void)Device;
 }
