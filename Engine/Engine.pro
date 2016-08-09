@@ -21,16 +21,18 @@ SOURCES += \
     PitchTracker.cpp \
     3rdParty/dywapitchtrack.c \
     PitchMonitor.cpp \
-    Utils.cpp
+    Utils.cpp \
+    Playback.cpp
 
 HEADERS +=\
     3rdParty/dywapitchtrack.h \
     Note.h \
     Pitch.h \
     PitchTracker.h \
-    Global.h \
     PitchMonitor.h \
-    Utils.h
+    Utils.h \
+    Playback.h \
+    Api.h
 
 unix {
     target.path = /usr/lib

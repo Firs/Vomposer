@@ -13,26 +13,13 @@
 ** You should have received a copy of the GNU Lesser General Public License
 ** along with this program. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickView>
-#include <QQmlContext>
+#pragma once
 
-#include "PitchMonitor.h"
-#include "PitchMonitorModel.h"
+#include <QtCore/qglobal.h>
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication App(argc, argv);
+#if defined(ENGINE_LIBRARY)
+    #define API_EXPORT Q_DECL_EXPORT
+#else
+    #define API_EXPORT Q_DECL_IMPORT
+#endif
 
-    FPitchMonitor Monitor;
-    FPitchMonitorModel Model(Monitor);
-
-    QQmlApplicationEngine AppEngine;
-    AppEngine.rootContext()->setContextProperty(
-                "PitchMonitor", static_cast<QObject*>(&Model));
-    AppEngine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
-
-
-return App.exec();
-}

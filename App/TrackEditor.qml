@@ -13,26 +13,8 @@
 ** You should have received a copy of the GNU Lesser General Public License
 ** along with this program. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickView>
-#include <QQmlContext>
+import QtQuick 2.0
 
-#include "PitchMonitor.h"
-#include "PitchMonitorModel.h"
+Item {
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication App(argc, argv);
-
-    FPitchMonitor Monitor;
-    FPitchMonitorModel Model(Monitor);
-
-    QQmlApplicationEngine AppEngine;
-    AppEngine.rootContext()->setContextProperty(
-                "PitchMonitor", static_cast<QObject*>(&Model));
-    AppEngine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
-
-
-return App.exec();
 }

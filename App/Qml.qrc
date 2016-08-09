@@ -3,5 +3,6 @@
         <file>Main.qml</file>
         <file>FrequencyBar.qml</file>
         <file>Treble_clef.svg</file>
+        <file>TrackEditor.qml</file>
     </qresource>
 </RCC>
