@@ -31,14 +31,14 @@ class FPitchMonitorModel : public QObject
     Q_PROPERTY(qreal PitchFrequency READ GetPitchFrequency NOTIFY pitchChanged)
     Q_PROPERTY(qreal PrevPitchFrequency READ GetPrevPitchFrequency NOTIFY pitchChanged)
     Q_PROPERTY(qreal NextPitchFrequency READ GetNextPitchFrequency NOTIFY pitchChanged)
+    Q_PROPERTY(QString LastSolidPitch READ GetLastSolidPitch NOTIFY pitchChanged)
 
     Q_PROPERTY(qreal Frequency READ GetFrequency NOTIFY pitchChanged)
 
 public:
     FPitchMonitorModel(
             FPitchMonitor& Monitor,
-            QObject *parent = nullptr);
-    virtual ~FPitchMonitorModel();
+            QObject* Parent = nullptr);
 
     QChar GetPitchClass() const;
     bool GetPitchSharp() const;
@@ -50,6 +50,8 @@ public:
 
     qreal GetFrequency() const;
 
+    QString GetLastSolidPitch() const;
+
 signals:
     void pitchChanged();
 
@@ -60,7 +62,9 @@ private:
     FPitchMonitor& PitchMonitor;
 
     const FPitch* CurrPitch;
-    const FPitch* LastPitch;
+    const FPitch* PrevPitch;
+
+    const FPitch* LastRecognizedPitch;
 
     qreal Frequency;
 };

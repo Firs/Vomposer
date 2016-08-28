@@ -23,16 +23,13 @@ FPitchMonitorModel::FPitchMonitorModel(
     : QObject(Parent)
     , PitchMonitor(Monitor)
     , CurrPitch(nullptr)
-    , LastPitch(nullptr)
+    , PrevPitch(nullptr)
+    , LastRecognizedPitch(nullptr)
     , Frequency(0.0)
 {
     CHECKED_CONNECT(&PitchMonitor, SIGNAL(PitchDetected(const FPitch*, qreal)),
                     this, SLOT(OnPitchUpdated(const FPitch*, qreal)));
     PitchMonitor.Start();
-}
-
-FPitchMonitorModel::~FPitchMonitorModel()
-{
 }
 
 QChar FPitchMonitorModel::GetPitchClass() const
@@ -72,20 +69,30 @@ qreal FPitchMonitorModel::GetFrequency() const
     return Frequency;
 }
 
+QString FPitchMonitorModel::GetLastSolidPitch() const
+{
+    return LastRecognizedPitch ? LastRecognizedPitch->ToString() : "";
+}
+
 
 void FPitchMonitorModel::OnPitchUpdated(const FPitch* Pitch, qreal OriginalFrequency)
 {
-    if (LastPitch == nullptr)
+    if (PrevPitch == nullptr)
     {
         // Filter out lonely pitches and random noise.
-        LastPitch = Pitch;
+        PrevPitch = Pitch;
         return;
     }
 
-    LastPitch = Pitch;
+    PrevPitch = Pitch;
 
     CurrPitch = Pitch;
     Frequency = OriginalFrequency;
+
+    if (CurrPitch)
+    {
+        LastRecognizedPitch = CurrPitch;
+    }
 
     emit pitchChanged();
 }

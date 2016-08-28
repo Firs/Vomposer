@@ -61,7 +61,6 @@ void FPitchMonitor::Start()
                             this, SLOT(OnAudioStateChanged(QAudio::State)));
 
             AudioInputIODevice = AudioInput->start();
-
             CHECKED_CONNECT(AudioInputIODevice, SIGNAL(readyRead()),
                             this, SLOT(OnAudioDataReady()));
         }
@@ -75,6 +74,17 @@ void FPitchMonitor::Pause()
     {
         AudioInput->suspend();
     }
+}
+
+void FPitchMonitor::Stop()
+{
+    if (AudioInput)
+    {
+        AudioInput->stop();
+        QCoreApplication::instance()->processEvents();
+        AudioInput->disconnect();
+    }
+    AudioInputIODevice = nullptr;
 }
 
 void FPitchMonitor::SetAudioInputDevice(const QAudioDeviceInfo& Device)
@@ -136,7 +146,7 @@ void FPitchMonitor::OnAudioDataReady()
 // Private functions
 //-----------------------------------------------------------------------------
 
-void FPitchMonitor::ResetAudioDevices()
+void FPitchMonitor::ResetAudioDevice()
 {
     delete AudioInput;
     AudioInput = nullptr;
@@ -155,7 +165,7 @@ void FPitchMonitor::Reset()
 
     RecordedSamples.clear();
 
-    ResetAudioDevices();
+    ResetAudioDevice();
 }
 
 bool FPitchMonitor::Initialize()
@@ -168,7 +178,7 @@ bool FPitchMonitor::Initialize()
     {
         if (CurrentAudioFormat != Format)
         {
-            ResetAudioDevices();
+            ResetAudioDevice();
 
             AudioBufferLength = CalculateAudioLength(CurrentAudioFormat, BufferDurationUs);
             AudioBuffer.resize(AudioBufferLength);
@@ -229,17 +239,6 @@ bool FPitchMonitor::SelectAudioFormat()
     SetAudioFormat(Format);
 
     return bFoundSupportedFormat;
-}
-
-void FPitchMonitor::Stop()
-{
-    if (AudioInput)
-    {
-        AudioInput->stop();
-        QCoreApplication::instance()->processEvents();
-        AudioInput->disconnect();
-    }
-    AudioInputIODevice = nullptr;
 }
 
 void FPitchMonitor::SetAudioState(QAudio::State State)

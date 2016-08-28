@@ -4,5 +4,6 @@
         <file>FrequencyBar.qml</file>
         <file>Treble_clef.svg</file>
         <file>TrackEditor.qml</file>
+        <file>RecordingBar.qml</file>
     </qresource>
 </RCC>

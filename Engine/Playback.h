@@ -21,13 +21,18 @@
 #include <QByteArray>
 #include <QObject>
 #include <QVector>
+#include <QScopedPointer>
+#include <QAudioOutput>
 
 #include "Api.h"
 
-QT_BEGIN_NAMESPACE
-class QAudioOutput;
-QT_END_NAMESPACE
 
+struct FSound;
+
+/**
+ * This class interfaces with the Qt Multimedia audio classes.
+ * Its role is to provide playback functionality.
+ */
 class API_EXPORT FPlayback : public QObject
 {
     Q_OBJECT
@@ -41,12 +46,12 @@ public:
 
     QAudio::State GetAudioState() const
     {
-        return CurrentAudioState;
+        return AudioState;
     }
 
     const QAudioFormat& GetAudioFormat() const
     {
-        return CurrentAudioFormat;
+        return AudioFormat;
     }
 
     /**
@@ -54,24 +59,35 @@ public:
      */
     void Reset();
 
+    void PlaySound(const FSound& Sound);
+
+public slots:
+    void Stop();
+    void Start();
+    void Pause();
+
+    void SetAudioOutputDevice(const QAudioDeviceInfo& Device);
+
 signals:
     void AudioFormatChanged(const QAudioFormat& Format);
 
-public slots:
-    void Start();
-    void Pause();
-    void Stop();
-    void SetAudioOutputDevice(const QAudioDeviceInfo& Device);
+private slots:
+    void OnAudioStateChanged(QAudio::State State);
+    void OnAudioNotify();
 
 private:
-    QAudio::State       CurrentAudioState;
-    QAudioFormat        CurrentAudioFormat;
+    bool Initialize();
+    void ResetAudioDevice();
+    bool SelectAudioFormat();
 
-    const QList<QAudioDeviceInfo> AvailableAudioOutputDevices;
-    QAudioDeviceInfo    AudioDeviceInfo;
-    QAudioOutput*       AudioOutput;
-    QIODevice*          AudioOutputIODevice;
+    void SetAudioFormat(const QAudioFormat& format);
 
-    QByteArray          AudioBuffer;
-    qint64              AudioBufferLength;
+private:
+    QAudio::State       AudioState;
+    QAudioFormat        AudioFormat;
+
+    const QList<QAudioDeviceInfo>   AvailableAudioOutputDevices;
+    QAudioDeviceInfo                AudioDeviceInfo;
+    QScopedPointer<QAudioOutput>    AudioOutput;
+    QBuffer                         AudioOutputBuffer;
 };

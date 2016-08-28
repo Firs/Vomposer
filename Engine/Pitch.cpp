@@ -23,7 +23,7 @@ namespace
 static int MaxId = 0;
 
 // Known pitches within the vocal range, sorted by frequency.
-FPitch KnownPitches[] =
+QVector<FPitch> KnownPitches =
 {
     { ++MaxId, 'C', false, 2, 65.41  },
     { ++MaxId, 'C', true , 2, 69.30  },
@@ -158,4 +158,9 @@ const FPitch* FPitch::GetNextPitch() const
     return (Id < MaxId) ? &KnownPitches[(Id + 1) - 1] : nullptr;
 }
 
+
+const QVector<FPitch>& FPitch::GetKnownPitches()
+{
+    return KnownPitches;
+}
 

@@ -5,10 +5,12 @@ CONFIG += c++11
 
 SOURCES += \
     Main.cpp \
-    PitchMonitorModel.cpp
+    PitchMonitorModel.cpp \
+    PlaybackModel.cpp
 
 HEADERS += \
-    PitchMonitorModel.h
+    PitchMonitorModel.h \
+    PlaybackModel.h
 
 RESOURCES += \
     Qml.qrc

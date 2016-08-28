@@ -17,22 +17,65 @@
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQmlContext>
+#include <QDebug>
+#include <QElapsedTimer>
 
 #include "PitchMonitor.h"
 #include "PitchMonitorModel.h"
 
+#include "SoundCache.h"
+#include "Playback.h"
+#include "PlaybackModel.h"
+
+#include "Synthesizer.h"
+
+void GenerateSounds(const QAudioFormat& Format, FSoundCache& Cache)
+{
+
+    qDebug() << "Building sound cache...";
+
+    QElapsedTimer Timer;
+    Timer.start();
+
+
+    FSynthesizer Synth;
+
+    Cache.Sounds.reserve(FPitch::GetKnownPitches().size());
+
+    for(const auto& Pitch : FPitch::GetKnownPitches())
+    {
+        FSound* Sound = Cache.Add(Pitch.ToString());
+        if (Sound)
+        {
+            Synth.GenerateSineWave(Pitch, Format, Sound->Data);
+        }
+    }
+
+    qDebug() << "Initialized"  << Cache.GetSize() << "pitches in" << Timer.elapsed() << "ms";
+
+}
+
 int main(int argc, char *argv[])
 {
     QGuiApplication App(argc, argv);
+    QQmlApplicationEngine AppEngine;
 
     FPitchMonitor Monitor;
-    FPitchMonitorModel Model(Monitor);
-
-    QQmlApplicationEngine AppEngine;
+    FPitchMonitorModel MonitorModel(Monitor);
     AppEngine.rootContext()->setContextProperty(
-                "PitchMonitor", static_cast<QObject*>(&Model));
+                "PitchMonitor", static_cast<QObject*>(&MonitorModel));
+
+    FPlayback Playback;
+    FSoundCache SoundCache;
+    FPlaybackModel PlaybackModel(Playback, SoundCache);
+    AppEngine.rootContext()->setContextProperty(
+                "Playback", static_cast<QObject*>(&PlaybackModel));
+
     AppEngine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
 
+    GenerateSounds(Playback.GetAudioFormat(), SoundCache);
 
-return App.exec();
+    //PlaybackModel.PlayNote("A4");
+
+    return App.exec();
 }

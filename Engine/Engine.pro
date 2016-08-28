@@ -22,7 +22,10 @@ SOURCES += \
     3rdParty/dywapitchtrack.c \
     PitchMonitor.cpp \
     Utils.cpp \
-    Playback.cpp
+    Playback.cpp \
+    SoundCache.cpp \
+    Sound.cpp \
+    Synthesizer.cpp
 
 HEADERS +=\
     3rdParty/dywapitchtrack.h \
@@ -32,7 +35,10 @@ HEADERS +=\
     PitchMonitor.h \
     Utils.h \
     Playback.h \
-    Api.h
+    Api.h \
+    SoundCache.h \
+    Sound.h \
+    Synthesizer.h
 
 unix {
     target.path = /usr/lib

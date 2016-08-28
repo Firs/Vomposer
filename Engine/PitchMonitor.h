@@ -60,23 +60,24 @@ public:
      */
     void Reset();
 
-signals:
-    void PitchDetected(const FPitch* Pitch, qreal OriginalFrequency);
-    void AudioFormatChanged(const QAudioFormat& Format);
-
 public slots:
     void Start();
     void Pause();
     void Stop();
+
     void SetAudioInputDevice(const QAudioDeviceInfo& Device);
+
+signals:
+    void PitchDetected(const FPitch* Pitch, qreal OriginalFrequency);
+    void AudioFormatChanged(const QAudioFormat& Format);
 
 private slots:
     void OnAudioDataReady();
     void OnAudioStateChanged(QAudio::State State);
 
 private:
-    void ResetAudioDevices();
     bool Initialize();
+    void ResetAudioDevice();
     bool SelectAudioFormat();
 
     void SetAudioState(QAudio::State State);

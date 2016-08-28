@@ -16,6 +16,7 @@
 #pragma once
 
 #include <QString>
+#include <QVector>
 
 #include "Api.h"
 
@@ -24,7 +25,9 @@ class API_EXPORT FPitch
 public:
     FPitch();
     FPitch(int Id, char Class, bool bSharp, int Octave, qreal Frequency);
+
     static const FPitch* FromFrequency(qreal Frequency);
+    static const QVector<FPitch>& GetKnownPitches();
 
     int Id;
     char Class;
@@ -41,5 +44,7 @@ public:
 
     const FPitch* GetNextPitch() const;
     const FPitch* GetPrevPitch() const;
+
 };
+
 
